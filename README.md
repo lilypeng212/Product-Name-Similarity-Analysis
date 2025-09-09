@@ -1,9 +1,8 @@
 # Product-Name-Similarity-Analysis
 
 ---
-title: "品名相似度"
-output: html_document
-date: "2025-03-18"
+"品名相似度"
+Created Date: "2025-03-18"
 ---
 
 ```{r setup, include=FALSE}
