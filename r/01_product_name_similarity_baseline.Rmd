@@ -1,5 +1,3 @@
-# Product-Name-Similarity-Analysis
-
 ---
 "品名相似度"
 Created Date: "2025-03-18"
