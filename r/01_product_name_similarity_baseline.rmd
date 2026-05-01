@@ -1,0 +1,128 @@
+# Product-Name-Similarity-Analysis
+
+---
+"品名相似度"
+Created Date: "2025-03-18"
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(stringdist)
+library(readxl)
+library(openxlsx)
+library(fuzzyjoin) 
+library(data.table)
+library(readr)
+
+
+上架商品_1P <- read_excel("C:/Users/Lily Peng/Downloads/2024Q3女裝有售商品.xlsx")
+
+
+上架新品_3P <- read_excel("C:/Users/Lily Peng/OneDrive - McKinsey & Company/3P女裝商品.xlsx")
+
+
+df_上架商品_1P <- data.frame(上架商品_1P)
+
+df_上架新品_3P <- data.frame(上架新品_3P)
+
+# df_上架商品_1P <- df_上架商品_1P %>%
+#   mutate(
+#     source = "1P",
+#     商品代碼 = as.character(goods_code),
+#     商品名稱 = goods_name
+#   )
+#   
+# 
+# df_上架商品_3P <- df_上架商品_3P %>%
+#   mutate(source = "3P") %>% 
+#   rename(商品代碼 = goods_code,
+#          商品名稱 = goods_name)
+# 
+# df_上架商品_1P <- bind_rows(df_上架商品_1P, df_上架商品_3P)
+
+
+df_上架商品_1P$商品名稱 <- as.character(df_上架商品_1P$商品名稱)
+df_上架新品_3P$商品名稱 <- as.character(df_上架新品_3P$商品名稱)
+
+```
+
+amatch
+```{r}
+start_time <- Sys.time()
+# 1. 過濾掉同品名 + 同品號的商品（保留同品名不同品號）
+df_全站_no_3P <- df_上架商品_1P %>%
+  anti_join(
+    df_上架新品_3P %>% select(商品名稱, 商品代碼),
+    by = c("商品名稱", "商品代碼")
+  )
+
+# 2. 進行 Jaccard 比對
+best_match_index <- amatch(
+  df_上架新品_3P$商品名稱,
+  df_全站_no_3P$商品名稱,
+  method = "jaccard",
+  maxDist = 0.5
+)
+
+# 3. 過濾有效比對
+valid_matches <- !is.na(best_match_index)
+
+# 4. 建立比對結果資料框
+df_best_match_2 <- df_上架新品_3P[valid_matches, ] %>%
+  mutate(
+    商品名稱_比對結果 = df_全站_no_3P$商品名稱[best_match_index[valid_matches]],
+    相似度 = 1 - stringdist(
+      商品名稱,
+      商品名稱_比對結果,
+      method = "jaccard"
+    )
+  )
+
+end_time <- Sys.time()
+
+write.xlsx(df_best_match_2, "商品相似度分析_3P女裝商品.xlsx", overwrite = TRUE)
+```
+
+
+計算相似商品業績
+```{r}
+# # 進行 left_join
+# df_上架新品_3P_with_similarity <- df_上架新品_3P_with_similarity %>%
+#   left_join(df_上架商品_1P, by = c("相似度高的商品" = "商品名稱"), relationship = "one-to-many") 
+# 
+# 
+# df_上架新品_3P_with_similarity <- df_上架新品_3P_with_similarity %>%
+#   rename(
+#     商品代碼_1P = 商品代碼.y,  
+#     商品名稱_1P = 相似度高的商品 
+#   )
+
+# # ✅ **計算 ASP**
+# df_上架新品_3P_with_similarity <- df_上架新品_3P_with_similarity %>%
+#   mutate(
+#     ASP_3P = ifelse(淨訂購數量.x > 0, 淨訂購金額.x / 淨訂購數量.x, NA),
+#     ASP_1P = ifelse(淨訂購數量.y > 0, 淨訂購金額.y / 淨訂購數量.y, NA),
+#     ASP_1P_3P_diff = ASP_1P - ASP_3P  # ✅ 計算 ASP 差異
+#   )
+```
+
+
+```{r}
+# **將 `df_上架新品_3P` 與 `df_best_match` 進行合併**
+df_best_match_3 <- df_best_match_2%>%
+  left_join(df_全站_no_3P, by = c("商品名稱_比對結果" = "商品名稱")) 
+
+# # **重新命名欄位**
+# df_上架新品_3P_with_similarity <- df_上架新品_3P_with_similarity %>%
+#   rename(
+#     商品代碼_1P = 商品代碼.y,  
+#     商品名稱_1P = 商品名稱_1P 
+#   )
+
+# # ✅ **依照 MD 部門排序，再依相似度排序**
+# df_best_match <- df_best_match %>%
+#   arrange(MD部別名稱.x, desc(相似度))
+
+# ✅ **儲存結果到 Excel**
+write.xlsx(df_best_match_3, "商品相似度分析_3P女裝商品_NEW.xlsx", overwrite = TRUE)
+```
