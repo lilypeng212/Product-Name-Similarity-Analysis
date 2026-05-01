@@ -1,4 +1,5 @@
 # Product Name Similarity Analysis
+This project evolved from a baseline fuzzy matching approach to a scalable parallelized workflow, and further to a category-constrained matching logic to improve business relevance.
 
 ## 📌 Problem
 As the e-commerce platform expanded its third-party (3P) marketplace, product names across 1P and 3P assortments often contained highly similar or duplicated descriptions. This made it difficult to identify overlapping products, evaluate assortment gaps, and improve product-level data quality.
