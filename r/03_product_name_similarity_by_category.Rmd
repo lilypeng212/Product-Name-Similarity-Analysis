@@ -15,9 +15,9 @@ library(progressr)
 library(readxl)
 
 
-有售商品_1P <- read_excel("C:/Users/Lily Peng/Downloads/6月有售商品_1P.xlsx")
+有售商品_1P <- read_excel("C:/Users/Lily Peng/Downloads/有售商品_1P.xlsx")
 
-有售商品_3P <- read_excel("C:/Users/Lily Peng/Downloads/6月有售商品_3P.xlsx")
+有售商品_3P <- read_excel("C:/Users/Lily Peng/Downloads/有售商品_3P.xlsx")
 
 
 df_有售商品_1P <- data.frame(有售商品_1P)
