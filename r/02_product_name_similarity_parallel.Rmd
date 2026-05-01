@@ -12,9 +12,9 @@ library(openxlsx)
 library(fuzzyjoin)
 library(data.table)
 library(readr)
-上架商品_1P <- read_excel("C:/Users/Lily Peng/OneDrive - McKinsey & Company/(EXT)-Shared folder_with momo team - Documents/2_mo+/999. Team working folder/Lily/0301-12_1P有售商品.xlsx",sheet=1)
+上架商品_1P <- read_excel("C:/Users/Lily Peng/Downloads/上架商品.xlsx",sheet=1)
 
-上架新品_3P <- read_excel("C:/Users/Lily Peng/OneDrive - McKinsey & Company/(EXT)-Shared folder_with momo team - Documents/5_Traffic/999. Working folder/Kevin/4_ad-hoc analysis/0301-12_3P無銷售商品.xlsx",sheet=3)
+上架新品_3P <- read_excel("C:/Users/Lily Peng/Downloads/3P新品.xlsx",sheet=3)
 
 df_上架商品_1P <- data.frame(上架商品_1P)
 df_上架新品_3P <- data.frame(上架新品_3P)
@@ -87,7 +87,7 @@ df_best_match <- df_上架新品_3P[df_best_match$原索引, ] %>%
 # ─────────────────────────────────────────────────────────────────
 end_time <- Sys.time()
 cat("★ 總耗時：", round(as.numeric(difftime(end_time, start_time, units="mins")), 1), "分鐘\n")
-write.xlsx(df_best_match, "商品相似度分析_無銷售1100_2.xlsx", overwrite = TRUE)
+write.xlsx(df_best_match, "商品相似度分析_無銷售.xlsx", overwrite = TRUE)
 ```
 
 
@@ -95,5 +95,5 @@ write.xlsx(df_best_match, "商品相似度分析_無銷售1100_2.xlsx", overwrit
 df_best_match <- df_best_match%>%
   left_join(df_上架商品_1P, by = c("商品名稱_比對結果" = "商品名稱"))
 # :white_check_mark: **儲存結果到 Excel**
-write.xlsx(df_best_match, "商品相似度分析_Alisa_speedtest.xlsx", overwrite = TRUE)
+write.xlsx(df_best_match, "商品相似度分析_speedtest.xlsx", overwrite = TRUE)
 print(":white_check_mark: 商品相似度分析已完成，結果儲存至 '商品相似度分析.xlsx'！")
