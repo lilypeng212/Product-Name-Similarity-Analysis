@@ -1,5 +1,5 @@
 ---
-"品名相似度"
+"Product Name Similarity Analysis — Baseline"
 Created Date: "2025-03-18"
 ---
 
