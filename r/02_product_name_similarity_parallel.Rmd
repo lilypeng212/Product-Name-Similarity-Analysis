@@ -1,7 +1,5 @@
-#faster version
-
 ---
-title: "Untitled"
+title: "Product Name Similarity Analysis — Parallel"
 output: html_document
 date: "2025-05-22"
 ---
