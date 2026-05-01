@@ -1,6 +1,5 @@
-############for layer1
-
-Title: "品名重複度(部門、第一層比對)"
+---
+Title: "Product Name Similarity Analysis By Category"
 output: html_document
 date: "2025-05-19"
 ---
