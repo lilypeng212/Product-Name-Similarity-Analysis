@@ -13,10 +13,10 @@ library(data.table)
 library(readr)
 
 
-上架商品_1P <- read_excel("C:/Users/Lily Peng/Downloads/2024Q3女裝有售商品.xlsx")
+上架商品_1P <- read_excel("C:/Users/Lily Peng/Downloads/有售商品.xlsx")
 
 
-上架新品_3P <- read_excel("C:/Users/Lily Peng/OneDrive - McKinsey & Company/3P女裝商品.xlsx")
+上架新品_3P <- read_excel("C:/Users/Lily Peng/Downloads/3有售商品.xlsx")
 
 
 df_上架商品_1P <- data.frame(上架商品_1P)
@@ -78,7 +78,7 @@ df_best_match_2 <- df_上架新品_3P[valid_matches, ] %>%
 
 end_time <- Sys.time()
 
-write.xlsx(df_best_match_2, "商品相似度分析_3P女裝商品.xlsx", overwrite = TRUE)
+write.xlsx(df_best_match_2, "商品相似度分析_3P有售商品.xlsx", overwrite = TRUE)
 ```
 
 
@@ -122,5 +122,5 @@ df_best_match_3 <- df_best_match_2%>%
 #   arrange(MD部別名稱.x, desc(相似度))
 
 # ✅ **儲存結果到 Excel**
-write.xlsx(df_best_match_3, "商品相似度分析_3P女裝商品_NEW.xlsx", overwrite = TRUE)
+write.xlsx(df_best_match_3, "商品相似度分析_3P有售商品_New.xlsx", overwrite = TRUE)
 ```
